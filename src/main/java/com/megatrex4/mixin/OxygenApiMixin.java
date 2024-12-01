@@ -38,6 +38,11 @@ public class OxygenApiMixin {
                 return;
             }
 
+            if (ArmorHelper.hasPassiveArmor(player)) {
+                ci.cancel(); // Passive armor provides protection
+                return;
+            }
+
             // Check if the player is protected
             if (ArmorHelper.isProtected(player)) {
 //                LOGGER.info("[MDA] Player {} is fully protected.", player.getName().getString());

@@ -33,7 +33,12 @@ public class TemperatureApiMixin {
 
             // Check if the player has full armor coverage
             if (!ArmorHelper.isArmorComplete(player)) {
-//                LOGGER.warn("[MDA] Player {} is missing armor pieces. No protection applied.", player.getName().getString());
+                return;
+            }
+
+            // Check if the player is protected by passive armor
+            if (ArmorHelper.hasPassiveArmor(player)) {
+                ci.cancel(); // Passive armor provides protection
                 return;
             }
 

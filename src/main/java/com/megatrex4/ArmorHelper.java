@@ -20,6 +20,13 @@ public class ArmorHelper {
             "modern_industrialization:gravichestplate"
     );
 
+    private static final List<String> PASSIVE_ARMOR_ITEMS = Arrays.asList(
+            "modern_industrialization:quantum_helmet",
+            "modern_industrialization:quantum_chestplate",
+            "modern_industrialization:quantum_leggings",
+            "modern_industrialization:quantum_boots"
+    );
+
     public static boolean isArmorComplete(Player player) {
         for (ItemStack stack : player.getArmorSlots()) {
             if (stack.isEmpty()) {
@@ -30,7 +37,17 @@ public class ArmorHelper {
     }
 
     public static boolean isProtected(Player player) {
-        return hasSpaceSuitWithOxygen(player) || hasEnergySetWithEnergy(player);
+        return hasPassiveArmor(player) || hasSpaceSuitWithOxygen(player) || hasEnergySetWithEnergy(player);
+    }
+
+    public static boolean hasPassiveArmor(Player player) {
+        for (ItemStack stack : player.getArmorSlots()) {
+            String itemId = stack.getItem().builtInRegistryHolder().key().location().toString();
+            if (PASSIVE_ARMOR_ITEMS.contains(itemId)) {
+                return true; // Passive armor detected
+            }
+        }
+        return false;
     }
 
     private static boolean hasSpaceSuitWithOxygen(Player player) {
@@ -50,13 +67,5 @@ public class ArmorHelper {
             }
         }
         return false;
-    }
-    public static boolean isWearingFullSpaceSuit(Player player) {
-        for (ItemStack stack : player.getArmorSlots()) {
-            if (!(stack.getItem() instanceof SpaceSuitItem)) {
-                return false; // At least one slot does not have a SpaceSuit item
-            }
-        }
-        return true; // All armor slots have SpaceSuit items
     }
 }
