@@ -1,0 +1,86 @@
+plugins {
+	id 'fabric-loom' version '1.8-SNAPSHOT'
+	id 'maven-publish'
+}
+
+version = project.version
+group = project.group
+
+base {
+	archivesName = 'industrialization_de_astra'
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://maven.fabricmc.net/' }
+	maven { url 'https://maven.teamresourceful.com/repository/maven-public/' }
+	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+	maven {
+		name = 'ParchmentMC'
+		url = 'https://maven.parchmentmc.org'
+	}
+}
+
+loom {
+	splitEnvironmentSourceSets()
+	mods {
+		"industrialization_de_astra" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+dependencies {
+	// Minecraft and mappings
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.layered {
+		officialMojangMappings()
+		parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchmentVersion}@zip")
+	}
+
+	// Fabric Loader and APIs
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	// Mod dependencies
+	modImplementation "earth.terrarium.adastra:ad_astra-fabric-${project.minecraft_version}:${project.adAstraVersion}"
+	modImplementation "com.teamresourceful.resourcefullib:resourcefullib-fabric-${project.minecraft_version}:${project.resourcefulLibVersion}"
+	modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-${project.minecraft_version}:${project.resourcefulConfigVersion}"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+java {
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+	archiveBaseName.set('industrialization_de_astra') // Base name of the JAR
+	archiveVersion.set("${project.version}+${project.minecraft_version}") // Include mod version and Minecraft version
+	from("LICENSE") {
+		rename { "${it}_industrialization_de_astra" } // Replace ${project.archivesName} with a static or relevant value
+	}
+}
+
+
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			artifactId = project.archives_base_name
+			from components.java
+		}
+	}
+}
