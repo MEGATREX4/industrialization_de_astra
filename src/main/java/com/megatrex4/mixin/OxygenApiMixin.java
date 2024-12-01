@@ -2,9 +2,11 @@ package com.megatrex4.mixin;
 
 import com.megatrex4.ArmorHelper;
 import com.megatrex4.EnergyItemManager;
+import earth.terrarium.adastra.common.handlers.PlanetHandler;
 import earth.terrarium.adastra.common.items.armor.SpaceSuitItem;
 import earth.terrarium.adastra.common.registry.ModDamageSources;
 import earth.terrarium.adastra.common.systems.OxygenApiImpl;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,6 +29,7 @@ public class OxygenApiMixin {
         LOGGER.info("[MDA] OxygenApiMixin successfully loaded!");
     }
 
+
     @Inject(method = "entityTick", at = @At("HEAD"), cancellable = true)
     private void customEntityTick(ServerLevel level, LivingEntity entity, CallbackInfo ci) {
         if (entity instanceof Player player) {
@@ -44,20 +47,29 @@ public class OxygenApiMixin {
 
                 ItemStack chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
                 if (chestItem.getItem() instanceof SpaceSuitItem spaceSuit) {
-                    if (SpaceSuitItem.hasOxygen(player)) {
+
+                    // Get the player's current position
+                    BlockPos playerPos = player.blockPosition();
+
+                    // Get the planet data for the player's position
+                    PlanetHandler planetHandler = PlanetHandler.read(level);
+                    boolean hasOxygen = PlanetHandler.hasOxygen(level, playerPos); // Check if the planet has oxygen at this position
+
+                    // If the planet has oxygen, cancel the energy consumption logic
+                    if (hasOxygen) {
+                        ci.cancel(); // If the planet has oxygen, cancel the damage logic
+                        return;
+                    }
+
+                    // Handle energy consumption if the planet lacks oxygen and no oxygen is supplied by the armor
+                    if (EnergyItemManager.hasSufficientEnergy(player) && !SpaceSuitItem.hasOxygen(player)) {
+                        EnergyItemManager.consumeEnergy(player); // Consume energy if enough is available and the armor doesn't supply oxygen
                         ci.cancel();
                         return;
                     }
                 }
-
-                // Handle energy consumption
-                if (EnergyItemManager.hasSufficientEnergy(player)) {
-                    EnergyItemManager.consumeEnergy(player);
-                    ci.cancel();
-                    return;
-                }
             }
-            entity.hurt(ModDamageSources.create(level, ModDamageSources.OXYGEN), 2.0F);
+            // In case of no oxygen and no energy, force player to suffocate or lose air supply
             player.setAirSupply(-80);
             ci.cancel();
         }

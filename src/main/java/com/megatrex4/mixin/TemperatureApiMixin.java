@@ -33,7 +33,7 @@ public class TemperatureApiMixin {
             }
 
             if (ArmorHelper.hasPassiveArmor(player)) {
-                ci.cancel();
+                ci.cancel(); // Passive armor provides protection
                 return;
             }
 
@@ -43,16 +43,27 @@ public class TemperatureApiMixin {
             if (isProtected) {
                 ItemStack chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
                 if (chestItem.getItem() instanceof SpaceSuitItem spaceSuit) {
-                    if (SpaceSuitItem.hasOxygen(player)) {
+                        ci.cancel();
+                        return;
+                }
+
+                // Get the temperature at the player's position
+                TemperatureApiImpl temperatureApi = new TemperatureApiImpl();  // Instantiate the TemperatureApiImpl
+                short temperature = temperatureApi.getTemperature(level, player.blockPosition());
+
+                // Handle extreme temperature logic
+                if (temperature > 70) { // Hot temperature
+                    if (EnergyItemManager.hasSufficientEnergy(player)) {
+                        EnergyItemManager.consumeEnergy(player);
                         ci.cancel();
                         return;
                     }
-                }
-
-                if (EnergyItemManager.hasSufficientEnergy(player)) {
-                    EnergyItemManager.consumeEnergy(player);
-                    ci.cancel();
-                    return;
+                } else if (temperature < -50) { // Cold temperature
+                    if (EnergyItemManager.hasSufficientEnergy(player)) {
+                        EnergyItemManager.consumeEnergy(player);
+                        ci.cancel();
+                        return;
+                    }
                 }
             }
         }

@@ -17,14 +17,15 @@ public class ArmorHelper {
             "techreborn:nano_chestplate",
             "techreborn:nano_leggings",
             "techreborn:nano_boots",
-            "modern_industrialization:gravichestplate"
+            "modern_industrialization:gravichestplate",
+            "modern_industrialization:quantum_leggings",
+            "modern_industrialization:quantum_helmet",
+            "modern_industrialization:quantum_boots"
     );
 
     private static final List<String> PASSIVE_ARMOR_ITEMS = Arrays.asList(
-            "modern_industrialization:quantum_helmet",
-            "modern_industrialization:quantum_chestplate",
-            "modern_industrialization:quantum_leggings",
-            "modern_industrialization:quantum_boots"
+            "modern_industrialization:quantum_chestplate"
+
     );
 
     public static boolean isArmorComplete(Player player) {

@@ -4,7 +4,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class EnergyItemManager {
-    public static final int REQUIRED_ENERGY = 100; // Energy consumed per tick
+    public static final int REQUIRED_ENERGY = 1000; // Energy consumed per tick
 
     public static boolean hasSufficientEnergy(Player player) {
         return getAvailableEnergy(player) >= REQUIRED_ENERGY;
