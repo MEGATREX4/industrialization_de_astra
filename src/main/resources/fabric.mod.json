@@ -3,13 +3,12 @@
 	"id": "industrialization_de_astra",
 	"version": "${version}",
 	"name": "Industrialization de Astra",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Industrialization de Astra enhances the Ad Astra experience by introducing advanced energy-based and passive armors. The mod integrates features like oxygen management, temperature protection, and energy consumption to create a more immersive space exploration and survival experience.",
 	"authors": [
-		"Me!"
+		"MEGATREX4"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://megatrex4.netlify.app/"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/industrialization_de_astra/icon.png",

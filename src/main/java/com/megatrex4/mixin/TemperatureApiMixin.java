@@ -22,23 +22,18 @@ public class TemperatureApiMixin {
     private static final Logger LOGGER = LoggerFactory.getLogger("IndustrializationDeAstra");
 
     static {
-//        System.out.println("[MDA] TemperatureApiMixin is being loaded!");
         LOGGER.info("[MDA] TemperatureApiMixin successfully loaded!");
     }
 
     @Inject(method = "entityTick", at = @At("HEAD"), cancellable = true)
     private void customTemperatureTick(ServerLevel level, LivingEntity entity, CallbackInfo ci) {
         if (entity instanceof Player player) {
-//            LOGGER.info("[MDA] Player detected: {}", player.getName().getString());
-
-            // Check if the player has full armor coverage
             if (!ArmorHelper.isArmorComplete(player)) {
                 return;
             }
 
-            // Check if the player is protected by passive armor
             if (ArmorHelper.hasPassiveArmor(player)) {
-                ci.cancel(); // Passive armor provides protection
+                ci.cancel();
                 return;
             }
 
@@ -46,30 +41,20 @@ public class TemperatureApiMixin {
             boolean isProtected = ArmorHelper.isProtected(player);
 
             if (isProtected) {
-//                LOGGER.info("[MDA] Player {} is fully protected from temperature effects.", player.getName().getString());
-
-                // Handle oxygen consumption if applicable
                 ItemStack chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
                 if (chestItem.getItem() instanceof SpaceSuitItem spaceSuit) {
                     if (SpaceSuitItem.hasOxygen(player)) {
-//                        LOGGER.info("[MDA] Player {} has sufficient oxygen. Preventing temperature damage...", player.getName().getString());
-//                        spaceSuit.consumeOxygen(chestItem, 1L);
-                        ci.cancel(); // Cancel default temperature logic
+                        ci.cancel();
                         return;
                     }
                 }
 
-                // Handle energy consumption if applicable
                 if (EnergyItemManager.hasSufficientEnergy(player)) {
-//                    LOGGER.info("[MDA] Player {} has sufficient energy. Preventing temperature damage...", player.getName().getString());
                     EnergyItemManager.consumeEnergy(player);
-                    ci.cancel(); // Cancel default temperature logic
+                    ci.cancel();
                     return;
                 }
             }
-
-            // Log potential damage if no protection
-//            LOGGER.warn("[MDA] Player {} is not protected from temperature effects.", player.getName().getString());
         }
     }
 }

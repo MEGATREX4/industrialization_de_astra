@@ -30,11 +30,7 @@ public class OxygenApiMixin {
     @Inject(method = "entityTick", at = @At("HEAD"), cancellable = true)
     private void customEntityTick(ServerLevel level, LivingEntity entity, CallbackInfo ci) {
         if (entity instanceof Player player) {
-//            LOGGER.info("[MDA] Player detected: {}", player.getName().getString());
-
-            // Ensure the player has full armor coverage
             if (!ArmorHelper.isArmorComplete(player)) {
-//                LOGGER.warn("[MDA] Player {} is missing armor pieces. No protection applied.", player.getName().getString());
                 return;
             }
 
@@ -45,14 +41,10 @@ public class OxygenApiMixin {
 
             // Check if the player is protected
             if (ArmorHelper.isProtected(player)) {
-//                LOGGER.info("[MDA] Player {} is fully protected.", player.getName().getString());
 
-                // Handle oxygen consumption
                 ItemStack chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
                 if (chestItem.getItem() instanceof SpaceSuitItem spaceSuit) {
                     if (SpaceSuitItem.hasOxygen(player)) {
-//                        LOGGER.info("[MDA] Player {} has sufficient oxygen. Preventing suffocation...", player.getName().getString());
-//                        spaceSuit.consumeOxygen(chestItem, 1L); // Use the instance method
                         ci.cancel();
                         return;
                     }
@@ -60,15 +52,11 @@ public class OxygenApiMixin {
 
                 // Handle energy consumption
                 if (EnergyItemManager.hasSufficientEnergy(player)) {
-//                    LOGGER.info("[MDA] Player {} has sufficient energy. Preventing suffocation...", player.getName().getString());
                     EnergyItemManager.consumeEnergy(player);
                     ci.cancel();
                     return;
                 }
             }
-
-            // Apply damage if not protected
-//            LOGGER.warn("[MDA] Player {} is not protected. Applying suffocation damage.", player.getName().getString());
             entity.hurt(ModDamageSources.create(level, ModDamageSources.OXYGEN), 2.0F);
             player.setAirSupply(-80);
             ci.cancel();
