@@ -23,31 +23,31 @@ public class OxygenApiMixin {
     private static final Logger LOGGER = LoggerFactory.getLogger("IndustrializationDeAstra");
 
     static {
-        System.out.println("[MDA] OxygenApiMixin is being loaded!");
+//        System.out.println("[MDA] OxygenApiMixin is being loaded!");
         LOGGER.info("[MDA] OxygenApiMixin successfully loaded!");
     }
 
     @Inject(method = "entityTick", at = @At("HEAD"), cancellable = true)
     private void customEntityTick(ServerLevel level, LivingEntity entity, CallbackInfo ci) {
         if (entity instanceof Player player) {
-            LOGGER.info("[MDA] Player detected: {}", player.getName().getString());
+//            LOGGER.info("[MDA] Player detected: {}", player.getName().getString());
 
             // Ensure the player has full armor coverage
             if (!ArmorHelper.isArmorComplete(player)) {
-                LOGGER.warn("[MDA] Player {} is missing armor pieces. No protection applied.", player.getName().getString());
+//                LOGGER.warn("[MDA] Player {} is missing armor pieces. No protection applied.", player.getName().getString());
                 return;
             }
 
             // Check if the player is protected
             if (ArmorHelper.isProtected(player)) {
-                LOGGER.info("[MDA] Player {} is fully protected.", player.getName().getString());
+//                LOGGER.info("[MDA] Player {} is fully protected.", player.getName().getString());
 
                 // Handle oxygen consumption
                 ItemStack chestItem = player.getItemBySlot(EquipmentSlot.CHEST);
                 if (chestItem.getItem() instanceof SpaceSuitItem spaceSuit) {
                     if (SpaceSuitItem.hasOxygen(player)) {
-                        LOGGER.info("[MDA] Player {} has sufficient oxygen. Preventing suffocation...", player.getName().getString());
-                        spaceSuit.consumeOxygen(chestItem, 1L); // Use the instance method
+//                        LOGGER.info("[MDA] Player {} has sufficient oxygen. Preventing suffocation...", player.getName().getString());
+//                        spaceSuit.consumeOxygen(chestItem, 1L); // Use the instance method
                         ci.cancel();
                         return;
                     }
@@ -55,7 +55,7 @@ public class OxygenApiMixin {
 
                 // Handle energy consumption
                 if (EnergyItemManager.hasSufficientEnergy(player)) {
-                    LOGGER.info("[MDA] Player {} has sufficient energy. Preventing suffocation...", player.getName().getString());
+//                    LOGGER.info("[MDA] Player {} has sufficient energy. Preventing suffocation...", player.getName().getString());
                     EnergyItemManager.consumeEnergy(player);
                     ci.cancel();
                     return;
@@ -63,7 +63,7 @@ public class OxygenApiMixin {
             }
 
             // Apply damage if not protected
-            LOGGER.warn("[MDA] Player {} is not protected. Applying suffocation damage.", player.getName().getString());
+//            LOGGER.warn("[MDA] Player {} is not protected. Applying suffocation damage.", player.getName().getString());
             entity.hurt(ModDamageSources.create(level, ModDamageSources.OXYGEN), 2.0F);
             player.setAirSupply(-80);
             ci.cancel();
