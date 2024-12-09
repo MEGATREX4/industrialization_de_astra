@@ -7,8 +7,10 @@ version = project.version
 group = project.group
 
 base {
-	archivesName = 'industrialization_de_astra'
+	archivesName = 'industrialization_de_astra' // Static archive name
 }
+
+version = project.hasProperty('mod_version') ? project.mod_version : 'unspecified'
 
 repositories {
 	mavenCentral()
@@ -68,13 +70,12 @@ java {
 }
 
 jar {
-	archiveBaseName.set('industrialization_de_astra') // Base name of the JAR
-	archiveVersion.set("${project.version}+${project.minecraft_version}") // Include mod version and Minecraft version
+	archiveBaseName.set(project.archives_base_name) // Base name from gradle.properties
+	archiveVersion.set("${version}+${project.minecraft_version}") // Correctly handles 'unspecified' when version is missing
 	from("LICENSE") {
-		rename { "${it}_industrialization_de_astra" } // Replace ${project.archivesName} with a static or relevant value
+		rename { "${it}_${project.archives_base_name}" }
 	}
 }
-
 
 publishing {
 	publications {
