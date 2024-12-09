@@ -9,7 +9,7 @@
 - **Balanced Gameplay:** Only the **Quantum Chestplate** from Modern Industrialization provides passive environmental protection, while other armor pieces act as part of a functional spacesuit.   
 
 ## Installation:  
-1. Download the latest release from [Releases](https://github.com/your-repo/releases).  
+1. Download the latest release from [Releases](https://github.com/MEGATREX4/industrialization_de_astra/releases).  
 2. Place the mod `.jar` file in your `mods` folder.  
 3. Launch Minecraft and enjoy your enhanced space exploration experience!  
 
