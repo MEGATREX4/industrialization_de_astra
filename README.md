@@ -17,7 +17,7 @@
 Contributions are always welcome! Feel free to report issues, suggest features, or submit pull requests to help improve the mod.  
 
 ## License:  
-This mod is licensed under [CC 4.0](LICENSE).  
+This mod is licensed under [LICENSE](LICENSE).  
 
 ---  
 
