@@ -10,7 +10,7 @@
 	"contact": {
 		"homepage": "https://megatrex4.netlify.app/"
 	},
-	"license": "CC0-1.0",
+	"license": "MEGATREXLICENSE 1.0",
 	"icon": "assets/industrialization_de_astra/icon.png",
 	"environment": "*",
 	"entrypoints": {

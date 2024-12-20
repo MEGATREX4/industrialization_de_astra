@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ArmorHelper {
-    private static final List<String> ENERGY_ITEMS = Arrays.asList(
+    public static final List<String> ENERGY_ITEMS = Arrays.asList(
             "techreborn:quantum_boots",
             "techreborn:quantum_helmet",
             "techreborn:quantum_leggings",
@@ -23,7 +23,7 @@ public class ArmorHelper {
             "modern_industrialization:quantum_boots"
     );
 
-    private static final List<String> PASSIVE_ARMOR_ITEMS = Arrays.asList(
+    public static final List<String> PASSIVE_ARMOR_ITEMS = Arrays.asList(
             "modern_industrialization:quantum_chestplate"
 
     );
@@ -31,10 +31,10 @@ public class ArmorHelper {
     public static boolean isArmorComplete(Player player) {
         for (ItemStack stack : player.getArmorSlots()) {
             if (stack.isEmpty()) {
-                return false; // At least one slot is empty
+                return false;
             }
         }
-        return true; // All slots are filled
+        return true;
     }
 
     public static boolean isProtected(Player player) {
@@ -45,7 +45,7 @@ public class ArmorHelper {
         for (ItemStack stack : player.getArmorSlots()) {
             String itemId = stack.getItem().builtInRegistryHolder().key().location().toString();
             if (PASSIVE_ARMOR_ITEMS.contains(itemId)) {
-                return true; // Passive armor detected
+                return true;
             }
         }
         return false;
@@ -54,7 +54,7 @@ public class ArmorHelper {
     private static boolean hasSpaceSuitWithOxygen(Player player) {
         for (ItemStack stack : player.getArmorSlots()) {
             if (stack.getItem() instanceof SpaceSuitItem && SpaceSuitItem.hasOxygen(player)) {
-                return true; // SpaceSuit has oxygen
+                return true;
             }
         }
         return false;
@@ -64,7 +64,7 @@ public class ArmorHelper {
         for (ItemStack stack : player.getArmorSlots()) {
             String itemId = stack.getItem().builtInRegistryHolder().key().location().toString();
             if (ENERGY_ITEMS.contains(itemId) && EnergyUtil.hasEnoughEnergy(stack, EnergyItemManager.REQUIRED_ENERGY)) {
-                return true; // Energy item has sufficient energy
+                return true;
             }
         }
         return false;
